@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  # 1. Servicio de la App (modo Producción)
+  app:
+    build: .
+    container_name: huellitas-app-prod
+    ports:
+      - "3000:3000"
+    restart: always # Reinicia el contenedor automáticamente si falla
+    environment:
+      # Estas variables se toman del servidor
+      # donde corramos el docker-compose (render?)
+    
+      MONGO_URI: ${MONGO_URI_PROD}
+      NODE_ENV: production
+      PORT: 3000
+      SECRET: ${SECRET_PROD}

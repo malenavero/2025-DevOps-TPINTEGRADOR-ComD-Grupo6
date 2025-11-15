@@ -26,8 +26,6 @@ Aplicación web para la gestión integral de una veterinaria y peluquería canin
 - **Postman:** - Herramienta para el testeo de los endpoints de la API.
 - **Nodemon:** - Utilidad para reiniciar automáticamente el servidor durante el desarrollo.
 
-
-
 ## Acceso en producción  🚀
 
 Podés acceder a la aplicación ya desplegada desde este enlace:
@@ -57,34 +55,47 @@ Accedé a la documentación Swagger para explorar los endpoints disponibles y en
 Estas instrucciones te permitirán levantar la app de forma local.
 
 ### Requisitos 
+* Tener instalado **Docker Desktop**. Podés descargarlo desde:
+    ➡️ [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
 
-- Tener instalado Node.js. Puede descargarlo desde:
-➡️ [https://nodejs.org/](https://nodejs.org/)
-    
-### Instalación desde una consola Bash 🔧
-- Clonar el repositorio:
-```bash
-    git clone https://github.com/malenavero/huellitasFelices.git
-```
-    
-- Posicionarse en la carpeta del proyecto:
-```bash
-    cd huellitasFelices
-```
+### Instalación y Ejecución 🔧
 
-- Instalar dependencias: 
-```bash
-    npm install
-```
+1.  **Clonar el repositorio:**
+    ```bash
+    git clone [https://github.com/malenavero/2025-DevOps-TPINTEGRADOR-ComD-Grupo6.git](https://github.com/malenavero/2025-DevOps-TPINTEGRADOR-ComD-Grupo6.git)
+    ```
 
+2.  **Posicionarse en la carpeta del proyecto:**
+    ```bash
+    cd 2025-DevOps-TPINTEGRADOR-ComD-Grupo6
+    ```
 
-- Crear archivo .env con los datos provistos en la entrega final.
-- Por último, desde la ruta del proyecto:
+3.  **Levantar los contenedores (App y BDD):**
+    En una terminal, ejecutar:
+    ```bash
+    docker-compose up
+    ```
+    *(La primera vez que se ejecuta, puede tardar unos minutos. En las ejecuciones siguientes, será instantáneo. Deberías ver en la terminal los logs de `huellitas-app-dev` y `huellitas-mongo-local`.)*
 
-```bash
-    npm run dev
-```
+4.  **Cargar los datos iniciales (Seed):**
+    Mientras la terminal anterior (del paso 3) sigue corriendo, **abrir una segunda terminal** y ejecutar:
+    ```bash
+    docker-compose exec app npm run seed
+    ```
+    *(Esto llenará la base de datos de Docker con los usuarios, productos y pacientes de prueba. Solo es necesario hacerlo la primera vez que levantas el proyecto, o después de resetear la base de datos.)*
 
+### Comandos útiles (Opcionales)
+
+* **Detener los contenedores (sin borrar datos):**
+    En la terminal del paso 3, presionar `Ctrl+C` y luego ejecutar:
+    ```bash
+    docker-compose down
+    ```
+
+* **Resetear la base de datos (Borra todos los datos):**
+    ```bash
+    docker-compose down -v
+    ```
 
 ### Acceso a la aplicación ⌨️
 
