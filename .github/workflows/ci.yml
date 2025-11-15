@@ -31,8 +31,8 @@ jobs:
         run: sleep 10
         
       - name: 6. Correr Pruebas (npm run test)
-        [cite_start]run: docker compose exec -T app npm run test 
-
+        run: docker-compose exec -T app npm run test
+      
   # --- JOB 2: Publicar la imagen ---
   push-to-registry:
     name: Publicar Imagen en GHCR
