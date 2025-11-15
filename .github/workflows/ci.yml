@@ -1,0 +1,41 @@
+name: Pipeline de Integración Continua (CI)
+
+# 1. TRIGGER
+# Le decimos a GitHub CUÁNDO debe correr esto.
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+# 2. JOBS
+# Le decimos a GitHub QUÉ debe hacer.
+jobs:
+  # Definimos un solo "job" para construir y testear nuestra app
+  build-and-test:
+    name: Construir y Testear con Docker
+    
+    # Le pedimos a GitHub una máquina virtual con Linux (Ubuntu)
+    runs-on: ubuntu-latest
+
+    # 3. STEPS
+    # La secuencia de comandos que debe ejecutar
+    steps:
+      # Paso 1: Bajar nuestro código de GitHub a la máquina virtual
+      - name: 1. Bajar el código (Checkout)
+        uses: actions/checkout@v4
+
+      # Paso 2: Levantar nuestros contenedores (app + db)
+      # Esto usa el "docker-compose.yml" de desarrollo para no tocar el de producción
+      - name: 2. Levantar el ambiente (Docker Compose)
+        run: docker-compose up -d
+
+      # Paso 3: Darle tiempo a la BDD para que arranque
+      # Es una buena práctica esperar a que Mongo esté listo
+      - name: 3. Esperar a que la BDD (Mongo) se inicie
+        run: sleep 10 # 10 segundos
+
+      # Paso 4: Correr los tests
+      # Ejecutamos "npm run test"  DENTRO del contenedor 'app'
+      - name: 4. Correr Pruebas (npm run test)
+        run: docker-compose exec -T app npm run test
