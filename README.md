@@ -30,7 +30,7 @@ Aplicación web para la gestión integral de una veterinaria y peluquería canin
 
 Podés acceder a la aplicación ya desplegada desde este enlace:
 
-🌐 https://huellitas-felices.onrender.com
+🌐 https://huellitas-felices-dev.onrender.com
 
 #### Usuarios de prueba
 
@@ -48,7 +48,7 @@ Podés acceder a la aplicación ya desplegada desde este enlace:
 
 Accedé a la documentación Swagger para explorar los endpoints disponibles y enviar peticiones de prueba de manera visual:
 
-➡️ https://huellitas-felices.onrender.com/docs
+➡️ https://huellitas-felices-dev.onrender.com/docs
 
 ## Guía para ejecutar en local 📋
 

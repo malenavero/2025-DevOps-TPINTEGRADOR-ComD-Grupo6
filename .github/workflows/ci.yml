@@ -1,7 +1,6 @@
-name: Pipeline de Integración Continua (CI)
+name: Pipeline de CI/CD
 
-# 1. TRIGGER
-# Le decimos a GitHub CUÁNDO debe correr esto.
+# 1. TRIGGERS
 on:
   push:
     branches: [ main, develop ]
@@ -9,44 +8,62 @@ on:
     branches: [ main, develop ]
 
 # 2. JOBS
-# Le decimos a GitHub QUÉ debe hacer.
 jobs:
-  # Definimos un solo job para construir y testear nuestra app
+  
+  # --- JOB 1: Build y correr tests ---
   build-and-test:
     name: Construir y Testear con Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Bajar el código (Checkout)
+        uses: actions/checkout@v4
+        
+      - name: 2. Configurar Docker QEMU
+        uses: docker/setup-qemu-action@v3
+        
+      - name: 3. Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: 4. Levantar el ambiente (Docker Compose)
+        run: docker compose up -d
+        
+      - name: 5. Esperar a que la BDD (Mongo) se inicie
+        run: sleep 10
+        
+      - name: 6. Correr Pruebas (npm run test)
+        [cite_start]run: docker compose exec -T app npm run test 
+
+  # --- JOB 2: Publicar la imagen ---
+  push-to-registry:
+    name: Publicar Imagen en GHCR
     
-    # Le pedimos a GitHub una máquina virtual con Linux (Ubuntu)
+    needs: build-and-test
+    
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    
     runs-on: ubuntu-latest
 
-    # 3. STEPS
+    permissions:
+      contents: read
+      packages: write 
+
     steps:
-    # La secuencia de comandos que debe ejecutar
-      # Paso 1: Bajar el código
       - name: 1. Bajar el código (Checkout)
         uses: actions/checkout@v4
 
-      # Paso 2: Configurar Docker QEMU 
-      - name: 2. Configurar Docker QEMU
-        uses: docker/setup-qemu-action@v3
-      
-      # Paso 3: Configurar Docker Buildx
-      - name: 3. Configurar Docker Buildx
-        # Esta acción instala y habilita el plugin "compose"
-        uses: docker/setup-buildx-action@v3
+      - name: 2. Loguearse a GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Paso 4: Levantar el ambiente 
-      - name: 4. Levantar el ambiente (Docker Compose)
-        run: docker compose up -d
+      - name: 3. Definir "tag" (nombre) de la imagen
+        run: echo "IMAGE_TAG=ghcr.io/${{ github.repository_owner }}/${{ github.repository_name }}:latest" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
 
-      # Paso 5: Esperar a que la BDD (Mongo) se inicie
-      - name: 5. Esperar a que la BDD (Mongo) se inicie
-        run: sleep 10
-
-      # Paso 6: Correr los tests
-      - name: 6. Correr Pruebas (npm run test)
-        run: docker compose exec -T app npm run test
-  
-
-  
-
- 
+      - name: 4. Construir y Publicar (Push) la imagen
+        uses: docker/build-push-action@v5
+        with:
+          context: . 
+          push: true
+          tags: ${{ env.IMAGE_TAG }}
