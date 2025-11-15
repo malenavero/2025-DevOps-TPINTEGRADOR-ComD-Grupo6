@@ -97,6 +97,12 @@ Estas instrucciones te permitirán levantar la app de forma local.
     docker compose down -v
     ```
 
+* **Correr los tests:**
+    ```bash
+    docker compose exec app npm run test
+    ```
+
+
 ### Acceso a la aplicación ⌨️
 
 En el navegador coloque la URL --> [http://localhost:3000](http://localhost:3000)
