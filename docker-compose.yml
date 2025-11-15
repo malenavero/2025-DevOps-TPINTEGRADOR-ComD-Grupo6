@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # 1. Servicio de la App (modo Desarrollo)
+  app:
+    # Construimos la imagen usando el Dockerfile de la carpeta actual
+    build: .
+    container_name: huellitas-app-dev
+    # Al ser para desarrollo, usamos el comando de dev (con hot-reload)
+    command: npm run dev
+    ports:
+      # Mapea el puerto 3000 local al 3000 del contenedor
+      - "3000:3000"
+    volumes:
+      # Mapeamos el código local al contenedor.
+      # Excluimos node_modules para usar los que se instalaron DENTRO del contenedor.
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      # Le pasamos la URL de la BDD que creamos abajo
+      MONGO_URI: mongodb://db:27017/huellitas_local_db
+      NODE_ENV: development
+      PORT: 3000
+      SECRET: 'dummy-secret-for-dev'
+    depends_on:
+      - db
+
+  # 2. Servicio de la Base de Datos (solo para Local)
+  db:
+    image: mongo:latest
+    container_name: huellitas-mongo-local
+    ports:
+      # Mapeamos el puerto
+      - "27017:27017"
+    volumes:
+      # Esto "persiste" los datos de la BDD en el disco local
+      - mongo-data:/data/db
+
+# Definimos el volumen que usamos arriba
+volumes:
+  mongo-data:

@@ -1,0 +1,14 @@
+# Ignora la carpeta de dependencias local
+node_modules
+
+# Ignora el control de versiones
+.git
+.gitignore
+
+# Ignora los archivos de Docker
+Dockerfile
+docker-compose.yml
+docker-compose.prod.yml
+
+# Ignora el .env
+.env
