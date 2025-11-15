@@ -30,7 +30,7 @@ Aplicación web para la gestión integral de una veterinaria y peluquería canin
 
 Podés acceder a la aplicación ya desplegada desde este enlace:
 
-🌐 https://huellitas-felices.onrender.com
+🌐 https://huellitas-felices-dev.onrender.com
 
 #### Usuarios de prueba
 
@@ -48,7 +48,7 @@ Podés acceder a la aplicación ya desplegada desde este enlace:
 
 Accedé a la documentación Swagger para explorar los endpoints disponibles y enviar peticiones de prueba de manera visual:
 
-➡️ https://huellitas-felices.onrender.com/docs
+➡️ https://huellitas-felices-dev.onrender.com/docs
 
 ## Guía para ejecutar en local 📋
 
@@ -73,14 +73,14 @@ Estas instrucciones te permitirán levantar la app de forma local.
 3.  **Levantar los contenedores (App y BDD):**
     En una terminal, ejecutar:
     ```bash
-    docker-compose up
+    docker compose up
     ```
     *(La primera vez que se ejecuta, puede tardar unos minutos. En las ejecuciones siguientes, será instantáneo. Deberías ver en la terminal los logs de `huellitas-app-dev` y `huellitas-mongo-local`.)*
 
 4.  **Cargar los datos iniciales (Seed):**
     Mientras la terminal anterior (del paso 3) sigue corriendo, **abrir una segunda terminal** y ejecutar:
     ```bash
-    docker-compose exec app npm run seed
+    docker compose exec app npm run seed
     ```
     *(Esto llenará la base de datos de Docker con los usuarios, productos y pacientes de prueba. Solo es necesario hacerlo la primera vez que levantas el proyecto, o después de resetear la base de datos.)*
 
@@ -89,13 +89,19 @@ Estas instrucciones te permitirán levantar la app de forma local.
 * **Detener los contenedores (sin borrar datos):**
     En la terminal del paso 3, presionar `Ctrl+C` y luego ejecutar:
     ```bash
-    docker-compose down
+    docker compose down
     ```
 
 * **Resetear la base de datos (Borra todos los datos):**
     ```bash
-    docker-compose down -v
+    docker compose down -v
     ```
+
+* **Correr los tests:**
+    ```bash
+    docker compose exec app npm run test
+    ```
+
 
 ### Acceso a la aplicación ⌨️
 
