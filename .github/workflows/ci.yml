@@ -1,0 +1,71 @@
+name: Pipeline de CI/CD
+
+# 1. TRIGGERS
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+# 2. JOBS
+jobs:
+  
+  # --- JOB 1: Build y correr tests ---
+  build-and-test:
+    name: Construir y Testear con Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Bajar el código (Checkout)
+        uses: actions/checkout@v4
+        
+      - name: 2. Configurar Docker QEMU
+        uses: docker/setup-qemu-action@v3
+        
+      - name: 3. Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: 4. Levantar el ambiente (Docker Compose)
+        run: docker compose up -d
+        
+      - name: 5. Esperar a que la BDD (Mongo) se inicie
+        run: sleep 10
+        
+      - name: 6. Correr Pruebas (npm run test)
+        run: docker compose exec -T app npm run test
+      
+  # --- JOB 2: Publicar la imagen ---
+  push-to-registry:
+    name: Publicar Imagen en GHCR
+    
+    needs: build-and-test
+    
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write 
+
+    steps:
+      - name: 1. Bajar el código (Checkout)
+        uses: actions/checkout@v4
+
+      - name: 2. Loguearse a GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 3. Definir tag y convertir a minúsculas
+        id: meta
+        run: |
+          echo "tags=ghcr.io/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]'):latest" >> $GITHUB_OUTPUT
+      - name: 4. Construir y Publicar  la imagen
+        uses: docker/build-push-action@v5
+        with:
+          context: . 
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+
