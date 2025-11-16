@@ -2,7 +2,7 @@
 
 Aplicación web para la gestión integral de una veterinaria y peluquería canina. Permite mejorar la trazabilidad de los servicios ofrecidos, la organización interna y el seguimiento de las mascotas. 
 
-## Funcionalidades principales
+## Funcionalidades principales 
 
 - **Autenticación básica de usuarios:** Permite el acceso mediante validación de credenciales almacenadas en base de datos y gestión de estado mediante sesiones.
 - **Autorización de usuarios:** Gestión de acceso a rutas privadas de la aplicación según rol.
