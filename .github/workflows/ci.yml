@@ -62,6 +62,7 @@ jobs:
         id: meta
         run: |
           echo "tags=ghcr.io/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]'):latest" >> $GITHUB_OUTPUT
+      
       - name: 4. Construir y Publicar  la imagen
         uses: docker/build-push-action@v5
         with:
