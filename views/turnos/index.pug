@@ -9,7 +9,7 @@ block content
       select(name="servicio")
         option(value="") Todos los servicios
         each s in servicios
-          option(value=s selected=(s === query.servicio))= s
+          option(value=s selected=(s === query.servicio))= capitalizar(s)
 
     .filtro
       input(type="date", name="fecha", value=query.fecha || '', lang="es")

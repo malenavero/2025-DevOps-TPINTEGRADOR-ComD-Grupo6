@@ -2,7 +2,7 @@
 
 Aplicación web para la gestión integral de una veterinaria y peluquería canina. Permite mejorar la trazabilidad de los servicios ofrecidos, la organización interna y el seguimiento de las mascotas. 
 
-## Funcionalidades principales
+## Funcionalidades principales  
 
 - **Autenticación básica de usuarios:** Permite el acceso mediante validación de credenciales almacenadas en base de datos y gestión de estado mediante sesiones.
 - **Autorización de usuarios:** Gestión de acceso a rutas privadas de la aplicación según rol.
@@ -134,6 +134,11 @@ huellitasFelices
 ├─ package-lock.json --> (Archivo generado automáticamente)
 ├─ package.json --> (Configuración del proyecto y dependencias)
 └─ swagger.js --> (Configuración de Swagger para documentar la API)
+└─ Dockerfile --> (Archivo para construir la imagen Docker de la aplicación)
+└─ docker-compose.yml --> (Archivo para definir y ejecutar los contenedores Docker)
+└─ docker-compose-prod.yml --> (Archivo para definir y ejecutar los contenedores Docker en producción)
+└─ .dockerignore --> (Archivo para ignorar archivos y carpetas al construir la imagen Docker)
+└─ README.md --> (Archivo de documentación del proyecto)
 ```
 
 ## Autores ✒️
