@@ -134,6 +134,11 @@ huellitasFelices
 ├─ package-lock.json --> (Archivo generado automáticamente)
 ├─ package.json --> (Configuración del proyecto y dependencias)
 └─ swagger.js --> (Configuración de Swagger para documentar la API)
+└─ Dockerfile --> (Archivo para construir la imagen Docker de la aplicación)
+└─ docker-compose.yml --> (Archivo para definir y ejecutar los contenedores Docker)
+└─ docker-compose-prod.yml --> (Archivo para definir y ejecutar los contenedores Docker en producción)
+└─ .dockerignore --> (Archivo para ignorar archivos y carpetas al construir la imagen Docker)
+└─ README.md --> (Archivo de documentación del proyecto)
 ```
 
 ## Autores ✒️
