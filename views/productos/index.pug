@@ -9,7 +9,8 @@ block content
       select#categoria(name="categoria")
         option(value="" selected=!(categoriaSeleccionada)) Todas las categorías
         each categoria in categorias
-          option(value=categoria selected=(categoria === categoriaSeleccionada))= categoria
+          option(value=categoria selected=(categoria === categoriaSeleccionada))= capitalizar(categoria)
+          
 
     .filtro
       label(for="nombre") Nombre:
