@@ -31,8 +31,8 @@ jobs:
         run: sleep 10
         
       - name: 6. Correr Pruebas (npm run test)
-        [cite_start]run: docker compose exec -T app npm run test [cite: 4-137]
-      
+        run: docker compose exec -T app npm run test     
+         
   # --- JOB 2: Publicar Imagen de STAGING (Develop) ---
   push-to-registry-staging:
     name: Publicar Imagen en GHCR (Staging)
