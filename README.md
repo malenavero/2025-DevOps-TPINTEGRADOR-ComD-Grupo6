@@ -28,9 +28,10 @@ Aplicación web para la gestión integral de una veterinaria y peluquería canin
 
 ## Acceso en producción  🚀
 
-Podés acceder a la aplicación ya desplegada desde este enlace:
+Podés acceder a la aplicación ya desplegada desde estos enlaces:
 
-🌐 https://huellitas-felices-dev.onrender.com
+🌐 STAGING: https://huellitas-felices-dev.onrender.com
+🌐 PRODUCTION: https://huellitas-felices-prod.onrender.com
 
 #### Usuarios de prueba
 
