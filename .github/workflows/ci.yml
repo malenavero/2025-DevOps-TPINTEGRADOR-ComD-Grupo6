@@ -31,22 +31,18 @@ jobs:
         run: sleep 10
         
       - name: 6. Correr Pruebas (npm run test)
-        run: docker compose exec -T app npm run test
-      
-  # --- JOB 2: Publicar la imagen ---
-  push-to-registry:
-    name: Publicar Imagen en GHCR
-    
+        run: docker compose exec -T app npm run test     
+         
+  # --- JOB 2: Publicar Imagen de STAGING (Develop) ---
+  push-to-registry-staging:
+    name: Publicar Imagen en GHCR (Staging)
     needs: build-and-test
-    
+    # Condición: Solo corre en PUSH (merge) a la rama 'develop'
     if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-    
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write 
-
     steps:
       - name: 1. Bajar el código (Checkout)
         uses: actions/checkout@v4
@@ -58,15 +54,47 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 3. Definir tag y convertir a minúsculas
+      - name: 3. Definir "tag" (nombre) para 'latest' (staging)
         id: meta
         run: |
           echo "tags=ghcr.io/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]'):latest" >> $GITHUB_OUTPUT
-      
-      - name: 4. Construir y Publicar  la imagen
+
+      - name: 4. Construir y Publicar la imagen "latest"
         uses: docker/build-push-action@v5
         with:
           context: . 
           push: true
           tags: ${{ steps.meta.outputs.tags }}
 
+  # --- JOB 3: Publicar Imagen de PRODUCCIÓN (Main) ---
+  push-to-registry-production:
+    name: Publicar Imagen en GHCR (Producción)
+    needs: build-and-test
+    # Condición: Solo corre en PUSH (merge) a la rama 'main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write 
+    steps:
+      - name: 1. Bajar el código (Checkout)
+        uses: actions/checkout@v4
+
+      - name: 2. Loguearse a GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 3. Definir "tag" (nombre) para 'stable' (producción)
+        id: meta
+        run: |
+          echo "tags=ghcr.io/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]'):stable" >> $GITHUB_OUTPUT
+
+      - name: 4. Construir y Publicar la imagen "stable"
+        uses: docker/build-push-action@v5
+        with:
+          context: . 
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
